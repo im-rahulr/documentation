@@ -3,9 +3,9 @@
   "theme": "luma",
   "name": "360blabs",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#FF9037",
+    "light": "#e17a26",
+    "dark": "#f0720a"
   },
   "favicon": "/favicon.svg",
   "navigation": {
@@ -125,7 +125,7 @@
   "description": "Get Started Documentation",
   "background": {
     "color": {
-      "dark": "#1D1916"
+      "dark": "#0E0C0D"
     }
   }
 }
