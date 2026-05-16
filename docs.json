@@ -84,7 +84,7 @@
     "color": {
       "dark": "#0E0C0D"
     },
-    "decoration": "windows"
+    "decoration": "grid"
   },
   "banner": {
     "content": "Welcome Guys",
