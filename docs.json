@@ -1,11 +1,11 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "luma",
-  "name": "360blabs",
+  "name": "360 labs",
   "colors": {
-    "primary": "#FF9037",
-    "light": "#e17a26",
-    "dark": "#f0720a"
+    "primary": "#e9f1e7",
+    "light": "#dbd6d1",
+    "dark": "#e4deda"
   },
   "favicon": "/favicon.svg",
   "navigation": {
@@ -52,7 +52,7 @@
     "links": [
       {
         "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "href": "mailto:rahul@mailo.com"
       }
     ],
     "primary": {
@@ -84,5 +84,9 @@
     "color": {
       "dark": "#0E0C0D"
     }
+  },
+  "banner": {
+    "content": "Welcome Guys",
+    "dismissible": true
   }
 }
