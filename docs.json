@@ -3,9 +3,9 @@
   "theme": "luma",
   "name": "360 labs",
   "colors": {
-    "primary": "#e9f1e7",
-    "light": "#dbd6d1",
-    "dark": "#e4deda"
+    "primary": "#0066CC",
+    "light": "#0071E3",
+    "dark": "#0071E3"
   },
   "favicon": "/favicon.svg",
   "navigation": {
