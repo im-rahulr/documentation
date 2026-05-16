@@ -1,0 +1,272 @@
+---
+title: "React Grab setup"
+description: "Install and configure React Grab in your project"
+icon: 'copy'
+---
+
+React Grab lets you copy any UI element's context — file name, React component, and HTML source — straight to your clipboard, ready to paste into your coding agent.
+
+## Copyable setup prompt
+
+Copy the block below and paste it into your AI agent to set up React Grab automatically:
+
+~~~txt
+Set up React Grab in this workspace. If this is a monorepo, ask me which package to install it in.
+
+1. Find the React app package in this workspace.
+2. If this is a monorepo, ask me which package to configure before making changes.
+3. Detect the package manager from lockfiles and install react-grab@latest in the selected package.
+4. Detect the framework and apply manual integration:
+   - Next.js App Router: in app/layout.tsx, add next/script and include a development-only Script tag with src="//unpkg.com/react-grab/dist/index.global.js", crossOrigin="anonymous", and strategy="beforeInteractive".
+   - Next.js Pages Router: in pages/_document.tsx, add the same development-only Script tag inside <Head>.
+   - Vite: in index.html <head>, add <script type="module">if (import.meta.env.DEV) { import("react-grab"); }</script>.
+   - TanStack Start: in src/routes/__root.tsx, inside useEffect and an import.meta.env.DEV check, run void import("react-grab").
+5. Keep the default activation key.
+6. Keep all React Grab setup development-only.
+7. Show me the edited files and the exact install command you ran.
+8. If the setup does not work, suggest running the React Grab CLI: npx grab@latest init.
+~~~
+
+## Usage
+
+Once installed, hover over any UI element in your browser and press:
+
+- **⌘C** (Cmd+C) on Mac
+- **Ctrl+C** on Windows/Linux
+
+This copies the element's context to your clipboard. For example:
+
+```
+<a class="ml-auto inline-block text-sm" href="#">
+  Forgot your password?
+</a>
+in LoginForm at components/login-form.tsx:46:19
+```
+
+## CLI installation (recommended)
+
+Run this command at your project root:
+
+```bash
+npx grab@latest init -y
+```
+
+Init options:
+
+| Flag | Description |
+|------|-------------|
+| `-y, --yes` | Skip confirmation prompts |
+| `-f, --force` | Force overwrite existing config |
+| `-k, --key <key>` | Activation key (e.g. `Meta+K`, `Ctrl+Shift+G`, `Space`) |
+| `--skip-install` | Skip package installation |
+| `-c, --cwd <cwd>` | Working directory |
+
+The CLI detects your framework and adds the necessary scripts automatically.
+
+## Configuration
+
+Update your React Grab settings:
+
+```bash
+npx grab@latest config
+```
+
+Config options:
+
+| Flag | Description |
+|------|-------------|
+| `-y, --yes` | Skip confirmation prompts |
+| `-k, --key <key>` | Activation key (e.g. `Meta+K`, `Ctrl+Shift+G`) |
+| `-m, --mode <mode>` | Activation mode (`toggle` or `hold`) |
+| `--hold-duration <ms>` | Key hold duration in milliseconds |
+| `--allow-input <bool>` | Allow activation inside input fields |
+| `--context-lines <n>` | Max context lines to include |
+| `--cdn <domain>` | CDN domain (e.g. `unpkg.com`, `custom.react-grab.com`) |
+
+### Examples
+
+```bash
+npx grab@latest config -k "Meta+K"                        # Cmd+K / Win+K
+npx grab@latest config -k "Ctrl+Shift+G"                   # Ctrl+Shift+G
+npx grab@latest config -m hold --hold-duration 150         # Hold mode with 150ms delay
+npx grab@latest config --context-lines 5                   # Include 5 lines of context
+```
+
+To discover all available commands:
+
+```bash
+npx grab@latest --help
+npx grab@latest init --help
+npx grab@latest config --help
+```
+
+## Manual installation
+
+<CodeGroup>
+```bash npm
+npm install react-grab@latest
+```
+
+```bash yarn
+yarn add react-grab@latest
+```
+
+```bash pnpm
+pnpm add react-grab@latest
+```
+
+```bash bun
+bun add react-grab@latest
+```
+</CodeGroup>
+
+## Framework guides
+
+### Next.js (App Router)
+
+Add this to your `app/layout.tsx`:
+
+```jsx
+import Script from "next/script";
+
+export default function RootLayout({ children }) {
+  return (
+    <html>
+      <head>
+        {process.env.NODE_ENV === "development" && (
+          <Script
+            src="//unpkg.com/react-grab/dist/index.global.js"
+            crossOrigin="anonymous"
+            strategy="beforeInteractive"
+          />
+        )}
+      </head>
+      <body>{children}</body>
+    </html>
+  );
+}
+```
+
+### Next.js (Pages Router)
+
+Add this to your `pages/_document.tsx`:
+
+```jsx
+import { Html, Head, Main, NextScript } from "next/document";
+
+export default function Document() {
+  return (
+    <Html lang="en">
+      <Head>
+        {process.env.NODE_ENV === "development" && (
+          <Script
+            src="//unpkg.com/react-grab/dist/index.global.js"
+            crossOrigin="anonymous"
+            strategy="beforeInteractive"
+          />
+        )}
+      </Head>
+      <body>
+        <Main />
+        <NextScript />
+      </body>
+    </Html>
+  );
+}
+```
+
+### Vite
+
+Add this to your `index.html`:
+
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <script type="module">
+      if (import.meta.env.DEV) {
+        import("react-grab");
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+```
+
+### Webpack
+
+Add this at the top of your main entry file (e.g. `src/index.tsx` or `src/main.tsx`):
+
+```tsx
+if (process.env.NODE_ENV === "development") {
+  import("react-grab");
+}
+```
+
+## Workspace setup walkthrough
+
+Follow these steps to set up React Grab in any workspace:
+
+1. **Find the React app** — identify the app package in the workspace (check `package.json` for React as a dependency).
+
+2. **Handle monorepos** — if the workspace is a monorepo, ask which package to configure before making changes.
+
+3. **Install the package** — detect the package manager from lockfiles and install `react-grab@latest`:
+
+   <CodeGroup>
+   ```bash npm
+   npm install react-grab@latest
+   ```
+   ```bash yarn
+   yarn add react-grab@latest
+   ```
+   ```bash pnpm
+   pnpm add react-grab@latest
+   ```
+   ```bash bun
+   bun add react-grab@latest
+   ```
+   </CodeGroup>
+
+4. **Detect the framework and integrate**:
+
+   | Framework | File | Action |
+   |-----------|------|--------|
+   | Next.js App Router | `app/layout.tsx` | Add `next/script` Script tag with `src="//unpkg.com/react-grab/dist/index.global.js"`, `crossOrigin="anonymous"`, `strategy="beforeInteractive"` inside `head` |
+   | Next.js Pages Router | `pages/_document.tsx` | Same Script tag inside `<Head>` |
+   | Vite | `index.html` | Add `<script type="module">if (import.meta.env.DEV) { import("react-grab"); }</script>` inside `<head>` |
+   | TanStack Start | `src/routes/__root.tsx` | Inside `useEffect` and an `import.meta.env.DEV` check, run `void import("react-grab")` |
+
+5. **Keep the default activation key** — no config changes needed for the key.
+
+6. **Keep all setup development-only** — wrap all integration in development environment checks.
+
+If the setup does not work, run the React Grab CLI:
+
+```bash
+npx grab@latest init
+```
+
+## Copyable setup prompt
+
+Copy the block below and paste it into your AI agent to set up React Grab automatically:
+
+~~~txt
+Set up React Grab in this workspace. If this is a monorepo, ask me which package to install it in.
+
+1. Find the React app package in this workspace.
+2. If this is a monorepo, ask me which package to configure before making changes.
+3. Detect the package manager from lockfiles and install react-grab@latest in the selected package.
+4. Detect the framework and apply manual integration:
+   - Next.js App Router: in app/layout.tsx, add next/script and include a development-only Script tag with src="//unpkg.com/react-grab/dist/index.global.js", crossOrigin="anonymous", and strategy="beforeInteractive".
+   - Next.js Pages Router: in pages/_document.tsx, add the same development-only Script tag inside <Head>.
+   - Vite: in index.html <head>, add <script type="module">if (import.meta.env.DEV) { import("react-grab"); }</script>.
+   - TanStack Start: in src/routes/__root.tsx, inside useEffect and an import.meta.env.DEV check, run void import("react-grab").
+5. Keep the default activation key.
+6. Keep all React Grab setup development-only.
+7. Show me the edited files and the exact install command you ran.
+8. If the setup does not work, suggest running the React Grab CLI: npx grab@latest init.
+~~~

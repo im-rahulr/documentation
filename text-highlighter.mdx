@@ -1,0 +1,153 @@
+---
+title: "Text Highlighter"
+description: "An animated text highlighting component with multiple trigger modes and directional animations"
+icon: 'highlighter'
+---
+
+<Card title="View on fancycomponents.dev" icon="external-link" href="https://www.fancycomponents.dev/docs/components/text/text-highlighter">
+  Interactive demo and live preview available.
+</Card>
+
+An animated text highlighting component with multiple trigger modes and directional animations.
+
+## Installation
+
+<CodeGroup>
+```bash cli
+npx shadcn add @fancy/text-highlighter
+```
+
+```bash manual
+npm install motion
+```
+</CodeGroup>
+
+## Usage
+
+Wrap your text content with the component and set the highlight color:
+
+```tsx
+import { TextHighlighter } from "@/components/fancy/text/text-highlighter"
+
+<TextHighlighter highlightColor="hsl(25, 90%, 80%)">
+  Highlighted text
+</TextHighlighter>
+```
+
+## How it works
+
+The component animates the text's background using `background-image` with a linear gradient. By animating `background-size`, it creates a reveal effect that wouldn't be possible with `background-color` alone.
+
+`box-decoration-break: clone` ensures multi-line text highlights each line properly.
+
+## Trigger modes
+
+| Mode | Description |
+|------|-------------|
+| `auto` | Animates immediately on mount |
+| `inView` | Animates when the element scrolls into viewport |
+| `hover` | Animates on mouse hover |
+| `ref` | Control programmatically via ref |
+
+## Directions
+
+| Direction | Animation |
+|-----------|-----------|
+| `ltr` | Left to right |
+| `rtl` | Right to left |
+| `ttb` | Top to bottom |
+| `btt` | Bottom to top |
+
+## Example
+
+```tsx
+"use client"
+
+import { TextHighlighter } from "@/components/fancy/text/text-highlighter"
+import { Transition } from "motion"
+
+export default function TextHighlighterDemo() {
+  const transition = { type: "spring", duration: 1, delay: 0.4, bounce: 0 }
+
+  return (
+    <div className="max-w-md mx-auto p-8">
+      <p>
+        Since{" "}
+        <TextHighlighter
+          className="rounded-[0.3em] px-px"
+          transition={transition as Transition}
+          highlightColor="#F2AD91"
+          useInViewOptions={{ once: true, initial: true, amount: 0.1 }}
+        >
+          Gutenberg first invented movable type
+        </TextHighlighter>{" "}
+        hundreds of different types have been designed.
+      </p>
+    </div>
+  )
+}
+```
+
+## Hover trigger
+
+```tsx
+<TextHighlighter
+  triggerType="hover"
+  direction="ltr"
+  className="px-2 py-1 cursor-pointer"
+  highlightColor="#BBC2E2"
+  transition={{ type: "spring", duration: 0.68, bounce: 0 }}
+>
+  hover me - left to right
+</TextHighlighter>
+```
+
+## Control via ref
+
+```tsx
+import { useRef } from "react"
+import { TextHighlighter, TextHighlighterRef } from "@/components/fancy/text/text-highlighter"
+
+export default function Demo() {
+  const ref = useRef<TextHighlighterRef>(null)
+
+  return (
+    <div>
+      <button onClick={() => ref.current?.animate()}>Highlight</button>
+      <button onClick={() => ref.current?.reset()}>Reset</button>
+
+      <TextHighlighter ref={ref} triggerType="ref" highlightColor="#F7F764">
+        Text to highlight
+      </TextHighlighter>
+    </div>
+  )
+}
+```
+
+## Notes
+
+- While the component supports a single highlight color directly, you can replace the `backgroundImage` with a gradient or image for fancier effects
+- Use animations sparingly — excessive highlighting can impact readability
+- Adjust `useInViewOptions` to control when animations trigger (e.g. increase `amount` threshold or set `once: true`)
+
+## Props
+
+### TextHighlighterProps
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| children | `React.ReactNode` | — | Text content to highlight |
+| as | `ElementType` | `"span"` | HTML element to render as |
+| triggerType | `"auto" \| "hover" \| "ref" \| "inView"` | `"inView"` | Animation trigger mode |
+| transition | `Transition` | `{ type: "spring", duration: 1, delay: 0, bounce: 0 }` | Animation transition config |
+| useInViewOptions | `UseInViewOptions` | `{ once: true, initial: false, amount: 0.5 }` | Options for `useInView` hook |
+| className | `string` | — | Class name for container |
+| highlightColor | `string` | `"hsl(25, 90%, 80%)"` | Highlight CSS color |
+| direction | `"ltr" \| "rtl" \| "ttb" \| "btt"` | `"ltr"` | Highlight animation direction |
+
+### TextHighlighterRef
+
+| Method | Description |
+|--------|-------------|
+| `animate(direction?)` | Trigger highlight animation with optional direction override |
+| `reset()` | Reset animation to initial state |

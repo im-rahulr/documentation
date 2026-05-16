@@ -1,0 +1,67 @@
+---
+title: "Tailwind CSS setup"
+description: "Install and configure Tailwind CSS in your project"
+icon: 'paint-brush'
+---
+
+Tailwind CSS is a utility-first CSS framework that lets you build custom designs directly in your markup.
+
+## Installation
+
+Install Tailwind CSS via npm:
+
+<CodeGroup>
+```bash npm
+npm install tailwindcss @tailwindcss/vite
+```
+
+```bash pnpm
+pnpm add tailwindcss @tailwindcss/vite
+```
+
+```bash yarn
+yarn add tailwindcss @tailwindcss/vite
+```
+</CodeGroup>
+
+## Vite setup
+
+Add the Tailwind plugin to your Vite configuration:
+
+```js
+// vite.config.js
+import tailwindcss from '@tailwindcss/vite'
+
+export default defineConfig({
+  plugins: [
+    tailwindcss()
+  ],
+})
+```
+
+## Import Tailwind
+
+Add the `@import` directive to your main CSS file:
+
+```css
+/* src/index.css */
+@import "tailwindcss";
+```
+
+## Verify it works
+
+Add some Tailwind utility classes to your HTML:
+
+```html
+<h1 class="text-3xl font-bold underline">
+  Hello, Tailwind CSS!
+</h1>
+```
+
+Start your dev server and open the page in your browser. You should see a bold, underlined heading styled with Tailwind.
+
+## Next steps
+
+- Learn about [utility classes](https://tailwindcss.com/docs/utility-first)
+- Explore the [configuration](https://tailwindcss.com/docs/configuration)
+- Check out [Tailwind UI](https://tailwindui.com) for pre-built components

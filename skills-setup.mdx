@@ -1,0 +1,120 @@
+---
+title: "Skills.sh setup"
+description: "Discover and install AI agent skills from the skills.sh ecosystem"
+icon: 'puzzle-piece'
+---
+
+[Skills.sh](https://www.skills.sh) is the open agent skills ecosystem — reusable capabilities for AI agents. Install skills with a single command to enhance your agents with procedural knowledge.
+
+## What are skills?
+
+Skills are reusable capabilities for AI agents. They provide procedural knowledge that helps agents accomplish specific tasks more effectively — think of them as plugins or extensions that enhance what your AI agent can do.
+
+## Installation
+
+Run directly with npx — no installation required:
+
+```bash
+npx skills add <owner/repo>
+```
+
+For example, to install the Vercel agent skills collection:
+
+```bash
+npx skills add vercel-labs/agent-skills
+```
+
+## CLI reference
+
+### Basic usage
+
+```
+npx skills add <skill-name>
+```
+
+Specify the owner and skill name to download and configure a skill for your AI agent.
+
+### Telemetry
+
+By default, the CLI collects anonymous telemetry data to rank skills on the leaderboard. This includes the skill name, skill files, and a timestamp — no personal or device information is collected.
+
+To opt out:
+
+```bash
+DISABLE_TELEMETRY=1 npx skills add <skill>
+```
+
+## Supported agents
+
+Skills work with most popular AI coding agents including Claude Code, Cursor, Windsurf, GitHub Copilot, Codex, Gemini, Cline, OpenCode, and many more.
+
+## API reference
+
+Skills.sh provides a REST API for programmatic access.
+
+### Base URL
+
+```
+https://skills.sh/api/v1/
+```
+
+All endpoints require an API key passed via the `Authorization` header. Request one at [skills-api@vercel.com](mailto:skills-api@vercel.com).
+
+```
+curl https://skills.sh/api/v1/skills \
+  -H "Authorization: Bearer sk_live_..."
+```
+
+### Rate limits
+
+| Tier | Limit |
+|------|-------|
+| Authenticated | 600 requests / minute per API key |
+
+### Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/v1/skills` | Paginated leaderboard of all skills |
+| GET | `/api/v1/skills/search` | Search skills by name or description |
+| GET | `/api/v1/skills/curated` | Official curated set of first-party skills |
+| GET | `/api/v1/skills/{source}/{skill}` | Detailed information about a single skill |
+| GET | `/api/v1/skills/audit/{source}/{skill}` | Security audit results for a skill |
+
+### Skill object
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Stable unique identifier (`{source}/{slug}`) |
+| `slug` | string | URL-safe skill slug |
+| `name` | string | Human-readable name |
+| `source` | string | Source repository or provider |
+| `installs` | integer | Total deduplicated install count |
+| `sourceType` | string | `"github"` or `"well-known"` |
+| `installUrl` | string | URL for installing with `npx skills add` |
+| `url` | string | Link to the skill's page on skills.sh |
+
+## Badge
+
+Add an install count badge to your README:
+
+```markdown
+[![skills.sh](https://skills.sh/b/owner/repo)](https://skills.sh/owner/repo)
+```
+
+Replace `owner/repo` with your GitHub source:
+
+```markdown
+[![skills.sh](https://skills.sh/b/anthropics/skills)](https://skills.sh/anthropics/skills)
+```
+
+## FAQ
+
+**How do I create my own skill?**  
+Create a GitHub repository with a skill definition file and a README. See existing popular skills for structure examples.
+
+**How is the leaderboard ranked?**  
+By anonymous telemetry from the CLI — aggregate installation counts only. No personal information is collected.
+
+**How secure is it?**  
+Skills go through routine security audits from partners including Gen Agent Trust Hub, Socket, Snyk, Runlayer, and ZeroLeaks.

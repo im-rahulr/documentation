@@ -1,0 +1,174 @@
+---
+title: "Error logging system"
+description: "Centralized error logging, tracking, and management for AI-based IDEs"
+icon: 'bug'
+---
+
+A centralized error logging system for AI-based IDEs (Cursor, Browser IDEs, etc.) with structured JSON formatting and timestamp-based organization.
+
+## Core functionality
+
+### Error logging structure
+
+Every error type has one consolidated JSON file (per date folder) containing an array of all errors of that type.
+
+```json
+{
+  "error_type": "FUNCTION_ERROR",
+  "date": "2024-12-11",
+  "total_errors_today": 5,
+  "errors": [
+    {
+      "error_id": "ERR_20241211_001",
+      "timestamp": "2024-12-11 14:30:22",
+      "priority": "HIGH",
+      "cause": "Null pointer exception - user object is null when accessing id property",
+      "root_reason": "Missing null validation check before property access",
+      "source": {
+        "file": "auth.js",
+        "line": 45,
+        "column": 12,
+        "function": "validateUser()"
+      },
+      "error_message": "Function returns undefined when user is null",
+      "error_stack": "TypeError: Cannot read property 'id' of undefined\n  at validateUser (auth.js:45:12)",
+      "language": "JAVASCRIPT",
+      "project_name": "login-system",
+      "resolution": {
+        "attempted_fix": "Added null check before accessing property",
+        "status": "RESOLVED",
+        "resolved_at": "2024-12-11 15:45:30"
+      }
+    }
+  ]
+}
+```
+
+## Folder organization
+
+```
+error-logs/
+├── 2024-12-11/
+│   ├── function_errors.json
+│   ├── syntax_errors.json
+│   ├── runtime_errors.json
+│   └── api_errors.json
+├── 2024-12-12/
+│   ├── function_errors.json
+│   ├── syntax_errors.json
+│   ├── runtime_errors.json
+│   └── api_errors.json
+└── bug_tracking/
+    ├── bug_registry.json
+    └── fixes_log.json
+```
+
+### Error types
+
+| Type | Description |
+|------|-------------|
+| `FUNCTION_ERROR` | Errors within function execution |
+| `SYNTAX_ERROR` | Code syntax and parsing errors |
+| `RUNTIME_ERROR` | Errors during program execution |
+| `API_ERROR` | API request and response errors |
+
+## Bug tracking registry
+
+```json
+{
+  "total_bugs_logged": 150,
+  "bugs_fixed": 42,
+  "bugs_pending": 78,
+  "bugs_investigating": 30,
+  "last_updated": "YYYY-MM-DD HH:MM:SS",
+  "bug_summary": [
+    {
+      "bug_id": "BUG_001",
+      "error_id": "ERR_20241211_001",
+      "bug_type": "FUNCTION_ERROR",
+      "description": "Function returns undefined in edge case",
+      "reported_at": "2024-12-11 14:30:22",
+      "assigned_to": "developer_name",
+      "status": "IN_PROGRESS",
+      "priority": "HIGH",
+      "fix_attempts": 3,
+      "estimated_fix_time": "2024-12-12 10:00:00"
+    }
+  ]
+}
+```
+
+## Fixes log
+
+```json
+{
+  "total_fixes_applied": 42,
+  "fixes_this_week": 8,
+  "fixes_this_month": 28,
+  "last_updated": "YYYY-MM-DD HH:MM:SS",
+  "recent_fixes": [
+    {
+      "fix_id": "FIX_001",
+      "bug_id": "BUG_001",
+      "error_id": "ERR_20241211_001",
+      "fixed_at": "2024-12-11 15:45:30",
+      "fixed_by": "developer_name",
+      "fix_description": "Added null check before accessing property",
+      "code_changes": "1 file changed, 3 insertions(+), 1 deletion(-)",
+      "git_commit": "abc1234def567",
+      "status": "VERIFIED"
+    }
+  ]
+}
+```
+
+## ID generation
+
+Each error gets a unique ID:
+
+```
+ERR_{YYYY}{MM}{DD}_{SEQUENCE}
+Example: ERR_20241211_001, ERR_20241211_002
+```
+
+Each bug gets: `BUG_{SEQUENCE}` (e.g. `BUG_001`)
+Each fix gets: `FIX_{SEQUENCE}` (e.g. `FIX_001`)
+
+## IDE integration workflow
+
+When an error occurs in your IDE:
+
+1. Capture error message, stack trace, and context
+2. Determine error type: `FUNCTION_ERROR`, `SYNTAX_ERROR`, `RUNTIME_ERROR`, or `API_ERROR`
+3. Create date-based folder: `error-logs/YYYY-MM-DD/` (if not exists)
+4. Load or create error type file: `error-logs/YYYY-MM-DD/{error_type}.json`
+5. Add error object to the `errors[]` array in that file
+6. Increment `total_errors_today` counter
+7. Update `bug_registry.json` with new bug entry
+8. If fix is applied, update `fixes_log.json`
+
+## Update rules
+
+- Every fix updates `bug_registry.json` and `fixes_log.json`
+- Timestamps are auto-generated using current system time
+- Status changes tracked: `PENDING` → `INVESTIGATING` → `RESOLVED`
+- Resolution time logged when status changes to `RESOLVED`
+
+## Initialization checklist
+
+On system startup:
+
+- Create `error-logs/` directory if not exists
+- Create today's date folder: `error-logs/YYYY-MM-DD/`
+- Initialize error type files: `function_errors.json`, `syntax_errors.json`, `runtime_errors.json`, `api_errors.json`
+- Initialize `bug_tracking/` folder with empty registry if needed
+- Verify write permissions to all folders
+- Load existing `bug_registry.json` and `fixes_log.json`
+
+## Logging rules
+
+- Log immediately on error detection
+- Include context: IDE type, language, file, line number
+- Be specific — detailed error messages, not generic ones
+- Track resolution — mark attempts and outcomes
+- Update stats — keep running counts of bugs and fixes
