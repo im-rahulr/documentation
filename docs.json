@@ -83,7 +83,8 @@
   "background": {
     "color": {
       "dark": "#0E0C0D"
-    }
+    },
+    "decoration": "windows"
   },
   "banner": {
     "content": "Welcome Guys",
